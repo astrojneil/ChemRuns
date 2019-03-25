@@ -4,7 +4,9 @@ import numpy as np
 c = 3e10 #cm/s
 planckEV = 4.1357e-15
 readfile = open('S1226.ascii', 'r')
-#writefile = open('Ascii_Spectrum.txt', 'w')
+SFR = 25 #msun/yrs
+tevo = 1e7 #yr  = 10 Myrs 
+Rstar = 50*3.086e18 #cm
 
 #loop through read file lines
 i = 0
@@ -36,12 +38,17 @@ readfile.close()
 
 for time in range(len(values)-2):
     writefile = open('Ascii_Spectrum_time'+str(time+1)+'.txt', 'w')
-    writefile.write("%6.4e %6.4e %6.4e \n"%(c/(values[0][-1]*1e-8), c/(values[0][0]*1e-8), len(values[0])))
+    writefile.write("%6.4e %6.4e %6.4e \n"%(planckEV*c/(values[0][-1]*1e-8), planckEV*c/(values[0][0]*1e-8), len(values[0])))
     for r in range(len(values[0])):
 	p = -1 - r
-        freq = c/(values[0][p]*1e-8) 
+	convert99 = 10**(np.log10(values[time+1][p]) + 44.077911)
+	Lout = convert99*((SFR*tevo)/1e6)
+	lam = values[0][p]*1e-8 #cm
+	Bv = Lout*(lam**2/c)*(1/(16*(np.pi**2)*(Rstar**2)))
+        
+	freq = c/(values[0][p]*1e-8) 
         energy = freq*planckEV 
-        intes = values[time+1][p]
+        intes = Bv
         ln = "%6.4e %6.4e %6.4e \n"%(energy,freq,intes)
 	writefile.write(ln)
     writefile.close()
