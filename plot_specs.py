@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+h = 4.1357e-15
+c_sp = 3e10
+
 
 def read_file(filename):
     f = open(filename, 'r')
@@ -20,18 +23,31 @@ def read_file(filename):
     intens = np.array(intens)
     return [en, fre, intens]
 
+def read_file2(filename):
+    f = open(filename, 'r')
+    en = []
+    fre = []
+    intens = []
+    i = 0
+    for line in f:
+        if i > 1:
+            ls = line.split()
+            en.append(float(ls[0])*13.605698066)
+            intens.append(float(ls[1]))
+        i = i+1
 
-spec1 = read_file('Spectrum_mine.txt')
-spec2 = read_file('Ascii_Spectrum_time1.txt')
-spec3 = read_file('Ascii_Spectrum_time6.txt')
-spec4 = read_file('Ascii_Spectrum_time11.txt')
-spec5 = read_file('Spectrum_HM0.txt')
+    en = np.array(en)
+    intens = np.array(intens)
+    intens_new = ((h*c_sp/en)**2)/(4*np.pi*c_sp)*intens
+    return [en, intens_new]
 
-plt.plot(spec1[0], spec1[2], label='mine')
-plt.plot(spec2[0], spec2[2], label='time1')
-plt.plot(spec3[0], spec3[2], label='time6')
-plt.plot(spec4[0], spec4[2], label='time11')
-plt.plot(spec5[0], spec5[2], label='HM0')
+
+spec1 = read_file('Spectrum_test.txt')
+spec2 = read_file('Spectrum_cloudy.txt')
+
+
+plt.plot(spec1[0], spec1[2], label='John Spec Converted')
+plt.plot(spec2[0], spec2[2], label='Cloudy Spec Converted')
 plt.legend(loc=2)
 
 plt.yscale('log')

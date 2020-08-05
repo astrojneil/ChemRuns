@@ -4,11 +4,16 @@ import yt
 from yt.units import dimensions
 import trident as tri
 
-ChemList = ['0000', '0001', '0002', '0003', '0004', '0005', '0006', '0007']#['0000', '0005', '0010', '0015']#, '0020']
-nonChemList = []#['0000', '0010', '0050', '0100', '0130']
-savedir = 'CI'
-noChemField = 'fracCI'
-ChemField = ''
+ChemList = ['0000', '0002', '0007', '0010', '0012', '0017', '0020', '0022', '0027', '0030', '0032']
+field = 'fracCVI'
+savedir = 'Jul29'
+
+writefile = open('../'+savedir+'/massFracs_wind.txt', 'w')
+writefile.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
+
+writefile_tri = open('../'+savedir+'/massFracs_wind_tri.txt', 'w')
+writefile_tri.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
+
 
 ###  HI mass fractions normalized by element
 def _HIfrac_trident(field, data):
@@ -27,7 +32,7 @@ def _MgIIfrac_trident(field, data):
     dens = data['Mg_p1_density']/(data['Mg_p0_density']+data['Mg_p1_density']+data['Mg_p2_density']+data['Mg_p3_density'])
     return dens
 def _MgIIfrac_chem(field, data):
-    dens = data['mgp ']/(data['mg  ']+data['mgp ']+data['mg2p']+data['mg3p'])
+    dens = data['mgp ']/(data['mg  ']+data['mgp ']+data['mg2p']+data['mg3p']+data['mg4p']+data['mg5p'])
     return dens
 def _MgIIdensity(field, data):
     dens = (data[(('flash', u'mgp '))]*data['density'])/(24.*1.6726219e-24)
@@ -36,19 +41,19 @@ def _MgIIdensity(field, data):
 
 ###  CI mass fractions normalized by element
 def _CIfrac_trident(field, data):
-    dens = data['C_p0_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density'])
+    dens = data['C_p0_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIfrac_chem(field, data):
-    dens = data['c   ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p '])
+    dens = data['c   ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 
 
 ###  CII mass fractions normalized by element
 def _CIIfrac_trident(field, data):
-    dens = data['C_p1_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density'])
+    dens = data['C_p1_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIIfrac_chem(field, data):
-    dens = data['cp  ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p '])
+    dens = data['cp  ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CIIdensity(field, data):
     dens = (data[(('flash', u'cp  '))]*data['density'])/(12.*1.6726219e-24)
@@ -57,10 +62,10 @@ def _CIIdensity(field, data):
 
 ###  CIII mass fractions normalized by element
 def _CIIIfrac_trident(field, data):
-    dens = data['C_p2_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density'])
+    dens = data['C_p2_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIIIfrac_chem(field, data):
-    dens = data['c2p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p '])
+    dens = data['c2p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CIIIdensity(field, data):
     dens = (data[(('flash', u'c2p '))]*data['density'])/(12.*1.6726219e-24)
@@ -69,13 +74,35 @@ def _CIIIdensity(field, data):
 
 ###  CVI mass fractions normalized by element
 def _CIVfrac_trident(field, data):
-    dens = data['C_p3_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density'])
+    dens = data['C_p3_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIVfrac_chem(field, data):
-    dens = data['c3p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p '])
+    dens = data['c3p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CIVdensity(field, data):
     dens = (data[(('flash', u'c3p '))]*data['density'])/(12.*1.6726219e-24)
+    return dens
+
+###  CV mass fractions normalized by element
+def _CVfrac_trident(field, data):
+    dens = data['C_p4_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
+    return dens
+def _CVfrac_chem(field, data):
+    dens = data['c4p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
+    return dens
+def _CVdensity(field, data):
+    dens = (data[(('flash', u'c4p '))]*data['density'])/(12.*1.6726219e-24)
+    return dens
+
+###  CVI mass fractions normalized by element
+def _CVIfrac_trident(field, data):
+    dens = data['C_p5_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
+    return dens
+def _CVIfrac_chem(field, data):
+    dens = data['c5p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
+    return dens
+def _CVIdensity(field, data):
+    dens = (data[(('flash', u'c5p '))]*data['density'])/(12.*1.6726219e-24)
     return dens
 
 
@@ -146,59 +173,77 @@ def _metallicity(field, data):
     return data.apply_units(v, "Zsun")
 
 
-for i in nonChemList:
-    data = yt.load('../windless_nochem/KH_hdf5_chk_'+i)
-    data.add_field(('gas', 'metallicity'), function=_metallicity, display_name='Metallicity', units='Zsun')
-
-    tri.add_ion_fields(data, ions=['H', 'Mg', 'C', 'N', 'O', 'Si', 'Ne'], ftype='gas')
-
-    data.add_field(('gas', 'fracHI'), function=_HIfrac_trident, display_name="H I Mass fraction", units="")
-    data.add_field(('gas', 'fracMgII'), function=_MgIIfrac_trident, display_name="Mg II Mass fraction", units="")
-    data.add_field(('gas', 'fracCI'), function=_CIfrac_trident, display_name="C I Mass fraction", units="")
-    data.add_field(('gas', 'fracCII'), function=_CIIfrac_trident, display_name="C II Mass fraction", units="")
-    data.add_field(('gas', 'fracCIII'), function=_CIIIfrac_trident, display_name="C III Mass fraction", units="")
-    data.add_field(('gas', 'fracCIV'), function=_CIVfrac_trident, display_name="C IV Mass fraction", units="")
-    data.add_field(('gas', 'fracSiIII'), function=_SiIIIfrac_trident, display_name="Si III Mass fraction", units="")
-    data.add_field(('gas', 'fracSiIV'), function=_SiIVfrac_trident, display_name="Si IV Mass fraction", units="")
-    data.add_field(('gas', 'fracNV'), function=_NVfrac_trident, display_name="N V Mass fraction", units="")
-    data.add_field(('gas', 'fracOVI'), function=_OVIfrac_trident, display_name="O VI Mass fraction", units="")
-    data.add_field(('gas', 'fracNeVIII'), function=_NeVIIIfrac_trident, display_name="Ne VIII Mass fraction", units="")
-
-    #p = yt.SlicePlot(data, 'z', 'temperature', origin = 'native')
-    p = yt.SlicePlot(data, 'z', noChemField, origin = 'native')
-    p.set_zlim(noChemField, 1e-4, 1.)
-    p.annotate_timestamp()
-    #p.save('windlessPlots/noChem'+i+'_'+savedir+'.png')
-
-
 for i in ChemList:
-    data = yt.load('../Chem_test/KH_hdf5_chk_'+i)
-
+    data = yt.load('../'+savedir+'/CT_hdf5_chk_'+i)
+    #pressure estimates:
     reg = data.all_data()
     maxPres = reg.max('pressure')
     minPres = reg.min('pressure')
 
     print('Max: '+str(maxPres))
     print('Min: '+str(minPres))
-
     print('ratio: '+str(minPres/maxPres))
 
+    #add MAIHEM chemistry fraction fields
     data.add_field(('gas', 'fracHI'), function=_HIfrac_chem, display_name="H I Mass fraction", units="")
     data.add_field(('gas', 'fracMgII'), function=_MgIIfrac_chem, display_name="Mg II Mass fraction", units="")
     data.add_field(('gas', 'fracCI'), function=_CIfrac_chem, display_name="C I Mass fraction", units="")
     data.add_field(('gas', 'fracCII'), function=_CIIfrac_chem, display_name="C II Mass fraction", units="")
     data.add_field(('gas', 'fracCIII'), function=_CIIIfrac_chem, display_name="C III Mass fraction", units="")
     data.add_field(('gas', 'fracCIV'), function=_CIVfrac_chem, display_name="C IV Mass fraction", units="")
+    data.add_field(('gas', 'fracCV'), function=_CVfrac_chem, display_name="C V Mass fraction", units="")
+    data.add_field(('gas', 'fracCVI'), function=_CVIfrac_chem, display_name="C VI Mass fraction", units="")
     data.add_field(('gas', 'fracSiIII'), function=_SiIIIfrac_chem, display_name="Si III Mass fraction", units="")
     data.add_field(('gas', 'fracSiIV'), function=_SiIVfrac_chem, display_name="Si IV Mass fraction", units="")
     data.add_field(('gas', 'fracNV'), function=_NVfrac_chem, display_name="N V Mass fraction", units="")
     data.add_field(('gas', 'fracOVI'), function=_OVIfrac_chem, display_name="O VI Mass fraction", units="")
     data.add_field(('gas', 'fracNeVIII'), function=_NeVIIIfrac_chem, display_name="Ne VIII Mass fraction", units="")
 
-    #p = yt.SlicePlot(data, 'z', 'temperature', origin='native')
-    p = yt.SlicePlot(data, 'z', noChemField, origin = 'native')
-    p.set_zlim(noChemField, 1e-4, 1.)
-    #p = yt.ProjectionPlot(data, 'z', 'density')
-    #p.set_zlim('densCIV', 1e1, 1e11)
+    #add Trident estimation fraction fields
+    data.add_field(('gas', 'metallicity'), function=_metallicity, display_name='Metallicity', units='Zsun')
+    tri.add_ion_fields(data, ions=['H', 'Mg', 'C', 'N', 'O', 'Si', 'Ne'], ftype='gas')
+
+    data.add_field(('gas', 'fracHI_tri'), function=_HIfrac_trident, display_name="H I Mass fraction", units="")
+    data.add_field(('gas', 'fracMgII_tri'), function=_MgIIfrac_trident, display_name="Mg II Mass fraction", units="")
+    data.add_field(('gas', 'fracCI_tri'), function=_CIfrac_trident, display_name="C I Mass fraction", units="")
+    data.add_field(('gas', 'fracCII_tri'), function=_CIIfrac_trident, display_name="C II Mass fraction", units="")
+    data.add_field(('gas', 'fracCIII_tri'), function=_CIIIfrac_trident, display_name="C III Mass fraction", units="")
+    data.add_field(('gas', 'fracCIV_tri'), function=_CIVfrac_trident, display_name="C IV Mass fraction", units="")
+    data.add_field(('gas', 'fracCV_tri'), function=_CVfrac_trident, display_name="C V Mass fraction", units="")
+    data.add_field(('gas', 'fracCVI_tri'), function=_CVIfrac_trident, display_name="C VI Mass fraction", units="")
+    data.add_field(('gas', 'fracSiIII_tri'), function=_SiIIIfrac_trident, display_name="Si III Mass fraction", units="")
+    data.add_field(('gas', 'fracSiIV_tri'), function=_SiIVfrac_trident, display_name="Si IV Mass fraction", units="")
+    data.add_field(('gas', 'fracNV_tri'), function=_NVfrac_trident, display_name="N V Mass fraction", units="")
+    data.add_field(('gas', 'fracOVI_tri'), function=_OVIfrac_trident, display_name="O VI Mass fraction", units="")
+    data.add_field(('gas', 'fracNeVIII_tri'), function=_NeVIIIfrac_trident, display_name="Ne VIII Mass fraction", units="")
+
+    #print the fraction data to file
+    #select the center of the simulations
+    ad = data.sphere([0.0, 7.7e20, 0.0], (50., 'pc'))   #wind!
+
+    #alldata = data.all_data()
+    #ad  = alldata.cut_region(['obj["blob"] >= 0.9'])     #cloud!
+    print('{:.4e}'.format(float(ad.mean('cjto'))))
+    writefile.write(str(i)+', '+'{:.4e}'.format(float(ad.mean('fracHI')))+', '+'{:.4e}'.format(float(ad.mean('fracMgII')))+', '+'{:.4e}'.format(float(ad.mean('fracCI')))+', '+'{:.4e}'.format(float(ad.mean('fracCII')))+', '+'{:.4e}'.format(float(ad.mean('fracCIII')))+', '+'{:.4e}'.format(float(ad.mean('fracCIV')))+', '+'{:.4e}'.format(float(ad.mean('fracCV')))+', '+'{:.4e}'.format(float(ad.mean('fracCVI')))+', '+'{:.4e}'.format(float(ad.mean('fracSiIII')))+', '+'{:.4e}'.format(float(ad.mean('fracSiIV')))+', '+'{:.4e}'.format(float(ad.mean('fracNV')))+', '+'{:.4e}'.format(float(ad.mean('fracOVI')))+', '+'{:.4e}'.format(float(ad.mean('fracNeVIII')))+'\n')
+
+    writefile_tri.write(str(i)+', '+'{:.4e}'.format(float(ad.mean('fracHI_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracMgII_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracCI_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracCII_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracCIII_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracCIV_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracCV_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracCVI_tri')))+',  '+'{:.4e}'.format(float(ad.mean('fracSiIII_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracSiIV_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracNV_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracOVI_tri')))+', '+'{:.4e}'.format(float(ad.mean('fracNeVIII_tri')))+'\n')
+
+    #plot trident fractions
+    p = yt.SlicePlot(data, 'z', field+'_tri', origin = 'native')
+    p.set_zlim(field+'_tri', 1e-4, 1.)
     p.annotate_timestamp()
-    p.save('../Chem_test/Chem_'+i+'_'+savedir+'.png')
+    p.save('../'+savedir+'/Tri'+i+field+'.png')
+
+    #plot MAIHEM fractions
+    p2 = yt.SlicePlot(data, 'z', field, origin = 'native')
+    p2.set_zlim(field, 1e-4, 1.)
+    p2.annotate_timestamp()
+    p2.save('../'+savedir+'/Chem_'+i+'_'+field+'.png')
+
+    #plot extra slices
+    p3 = yt.SlicePlot(data, 'z', 'density', origin = 'native')
+    #p3.set_zlim('pressure', 1e-12, 2e-12)
+    p3.save('../'+savedir+'/'+i+'densSlice.png')
+
+writefile.close()
+writefile_tri.close()
