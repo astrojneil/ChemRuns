@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.colors import ListedColormap
 import yt
 from yt.units import dimensions
 import trident as tri
@@ -13,6 +15,12 @@ writefile.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OV
 
 writefile_tri = open('../'+savedir+'/massFracs_cloud_tri.txt', 'w')
 writefile_tri.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
+
+viridis = cm.get_cmap('viridis', 256)
+newcolors = viridis(np.linspace(0, 1, 256))
+white = np.array([255/256, 255/256, 255/256, 1])
+newcolors[:1, :] = white
+newcmp = ListedColormap(newcolors)
 
 
 ###  HI mass fractions normalized by element
@@ -230,13 +238,15 @@ for i in ChemList:
 
     #plot trident fractions
     p = yt.SlicePlot(data, 'z', field+'_tri', origin = 'native')
-    p.set_zlim(field+'_tri', 1e-4, 1.)
+    p.set_zlim(field+'_tri', 9e-5, 1.)
+    p.set_cmap(field+'_tri', cmap=newcmp)
     p.annotate_timestamp()
     p.save('../'+savedir+'/Tri'+i+field+'.png')
 
     #plot MAIHEM fractions
     p2 = yt.SlicePlot(data, 'z', field, origin = 'native')
-    p2.set_zlim(field, 1e-4, 1.)
+    p2.set_zlim(field, 9e-5, 1.)
+    p2.set_cmap(field, cmap=newcmp)
     p2.annotate_timestamp()
     p2.save('../'+savedir+'/Chem_'+i+'_'+field+'.png')
 
