@@ -4,14 +4,14 @@ import yt
 from yt.units import dimensions
 import trident as tri
 
-ChemList = ['0000', '0002', '0007', '0010', '0012', '0017', '0020', '0022', '0027', '0030', '0032']
-field = 'fracCVI'
-savedir = 'Jul29'
+ChemList = ['0000', '0005', '0010', '0015', '0016']
+field = 'fracOVI'
+savedir = 'M1-v480-T1-chem'
 
-writefile = open('../'+savedir+'/massFracs_wind.txt', 'w')
+writefile = open('../'+savedir+'/massFracs_cloud.txt', 'w')
 writefile.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
 
-writefile_tri = open('../'+savedir+'/massFracs_wind_tri.txt', 'w')
+writefile_tri = open('../'+savedir+'/massFracs_cloud_tri.txt', 'w')
 writefile_tri.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
 
 
@@ -29,7 +29,7 @@ def _HIdensity(field, data):
 
 ###  MgII mass fractions normalized by element
 def _MgIIfrac_trident(field, data):
-    dens = data['Mg_p1_density']/(data['Mg_p0_density']+data['Mg_p1_density']+data['Mg_p2_density']+data['Mg_p3_density'])
+    dens = data['Mg_p1_density']/(data['Mg_p0_density']+data['Mg_p1_density']+data['Mg_p2_density']+data['Mg_p3_density']+data['Mg_p4_density']+data['Mg_p5_density'])
     return dens
 def _MgIIfrac_chem(field, data):
     dens = data['mgp ']/(data['mg  ']+data['mgp ']+data['mg2p']+data['mg3p']+data['mg4p']+data['mg5p'])
@@ -132,10 +132,10 @@ def _SiIVdensity(field, data):
 
 ###  NV mass fractions normalized by element
 def _NVfrac_trident(field, data):
-    dens = data['N_p4_density']/(data['N_p0_density']+data['N_p1_density']+data['N_p2_density']+data['N_p3_density']+data['N_p5_density']+data['N_p6_density'])
+    dens = data['N_p4_density']/(data['N_p0_density']+data['N_p1_density']+data['N_p2_density']+data['N_p3_density']+data['N_p5_density']+data['N_p6_density']+data['N_p7_density'])
     return dens
 def _NVfrac_chem(field, data):
-    dens = data['n4p ']/(data['n   ']+data['np  ']+data['n2p ']+data['n3p ']+data['n4p ']+data['n5p ']+data['n6p '])
+    dens = data['n4p ']/(data['n   ']+data['np  ']+data['n2p ']+data['n3p ']+data['n4p ']+data['n5p ']+data['n6p ']+data['n7p '])
     return dens
 def _NVdensity(field, data):
     dens = (data[(('flash', u'n4p '))]*data['density'])/(14.*1.6726219e-24)
@@ -144,10 +144,10 @@ def _NVdensity(field, data):
 
 ###  OVI mass fractions normalized by element
 def _OVIfrac_trident(field, data):
-    dens = data['O_p5_density']/(data['O_p0_density']+data['O_p1_density']+data['O_p2_density']+data['O_p3_density']+data['O_p4_density']+data['O_p5_density']+data['O_p6_density']+data['O_p7_density'])
+    dens = data['O_p5_density']/(data['O_p0_density']+data['O_p1_density']+data['O_p2_density']+data['O_p3_density']+data['O_p4_density']+data['O_p5_density']+data['O_p6_density']+data['O_p7_density']+data['O_p8_density'])
     return dens
 def _OVIfrac_chem(field, data):
-    dens = data['o5p ']/(data['o   ']+data['op  ']+data['o2p ']+data['o3p ']+data['o4p ']+data['o5p ']+data['o6p ']+data['o7p '])
+    dens = data['o5p ']/(data['o   ']+data['op  ']+data['o2p ']+data['o3p ']+data['o4p ']+data['o5p ']+data['o6p ']+data['o7p ']+data['o8p '])
     return dens
 def _OVIdensity(field, data):
     dens = (data[(('flash', u'o5p '))]*data['density'])/(16.*1.6726219e-24)
@@ -242,7 +242,7 @@ for i in ChemList:
 
     #plot extra slices
     p3 = yt.SlicePlot(data, 'z', 'density', origin = 'native')
-    #p3.set_zlim('pressure', 1e-12, 2e-12)
+    p3.set_zlim('density', 1e-28, 1e-23)
     p3.save('../'+savedir+'/'+i+'densSlice.png')
 
 writefile.close()
