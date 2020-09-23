@@ -6,14 +6,14 @@ import yt
 from yt.units import dimensions
 import trident as tri
 
-ChemList = ['0000', '0005', '0010', '0015', '0016']
-field = 'fracOVI'
-savedir = 'M1-v480-T1-chem'
+ChemList = ['0005', '0010', '0015', '0020', '0025', '0030', '0033']
+field = 'fracMgII'
+savedir = 'M6.2-v3000-T1-chem'
 
-writefile = open('../'+savedir+'/massFracs_cloud.txt', 'w')
+writefile = open('../'+savedir+'/massFracs_wind.txt', 'w')
 writefile.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
 
-writefile_tri = open('../'+savedir+'/massFracs_cloud_tri.txt', 'w')
+writefile_tri = open('../'+savedir+'/massFracs_wind_tri.txt', 'w')
 writefile_tri.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
 
 viridis = cm.get_cmap('viridis', 256)
@@ -29,6 +29,7 @@ def _HIfrac_trident(field, data):
     return dens
 def _HIfrac_chem(field, data):
     dens = data['h   ']/(data['h   ']+data['hp  '])
+    #dens = data['h']/(data['h']+data['hp'])
     return dens
 def _HIdensity(field, data):
     dens = (data[(('flash', u'hp  '))]*data['density'])/(2.*1.6726219e-24)
@@ -40,10 +41,11 @@ def _MgIIfrac_trident(field, data):
     dens = data['Mg_p1_density']/(data['Mg_p0_density']+data['Mg_p1_density']+data['Mg_p2_density']+data['Mg_p3_density']+data['Mg_p4_density']+data['Mg_p5_density'])
     return dens
 def _MgIIfrac_chem(field, data):
+    #dens = data['mgp']/(data['mg']+data['mgp']+data['mg2p']+data['mg3p']+data['mg4p']+data['mg5p'])
     dens = data['mgp ']/(data['mg  ']+data['mgp ']+data['mg2p']+data['mg3p']+data['mg4p']+data['mg5p'])
     return dens
 def _MgIIdensity(field, data):
-    dens = (data[(('flash', u'mgp '))]*data['density'])/(24.*1.6726219e-24)
+    dens = (data[(('flash', u'mgp'))]*data['density'])/(24.*1.6726219e-24)
     return dens
 
 
@@ -52,6 +54,7 @@ def _CIfrac_trident(field, data):
     dens = data['C_p0_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIfrac_chem(field, data):
+    #dens = data['c']/(data['c']+data['cp']+data['c2p']+data['c3p']+data['c4p']+data['c5p']+data['c6p'])
     dens = data['c   ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 
@@ -61,6 +64,7 @@ def _CIIfrac_trident(field, data):
     dens = data['C_p1_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIIfrac_chem(field, data):
+    #dens = data['cp']/(data['c']+data['cp']+data['c2p']+data['c3p']+data['c4p']+data['c5p']+data['c6p'])
     dens = data['cp  ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CIIdensity(field, data):
@@ -73,6 +77,7 @@ def _CIIIfrac_trident(field, data):
     dens = data['C_p2_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIIIfrac_chem(field, data):
+    #dens = data['c2p']/(data['c']+data['cp']+data['c2p']+data['c3p']+data['c4p']+data['c5p']+data['c6p'])
     dens = data['c2p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CIIIdensity(field, data):
@@ -85,6 +90,7 @@ def _CIVfrac_trident(field, data):
     dens = data['C_p3_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CIVfrac_chem(field, data):
+    #dens = data['c3p']/(data['c']+data['cp']+data['c2p']+data['c3p']+data['c4p']+data['c5p']+data['c6p'])
     dens = data['c3p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CIVdensity(field, data):
@@ -96,6 +102,7 @@ def _CVfrac_trident(field, data):
     dens = data['C_p4_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CVfrac_chem(field, data):
+    #dens = data['c4p']/(data['c']+data['cp']+data['c2p']+data['c3p']+data['c4p']+data['c5p']+data['c6p'])
     dens = data['c4p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CVdensity(field, data):
@@ -107,6 +114,7 @@ def _CVIfrac_trident(field, data):
     dens = data['C_p5_density']/(data['C_p0_density']+data['C_p1_density']+data['C_p2_density']+data['C_p3_density']+data['C_p4_density']+data['C_p5_density']+data['C_p6_density'])
     return dens
 def _CVIfrac_chem(field, data):
+    #dens = data['c5p']/(data['c']+data['cp']+data['c2p']+data['c3p']+data['c4p']+data['c5p']+data['c6p'])
     dens = data['c5p ']/(data['c   ']+data['cp  ']+data['c2p ']+data['c3p ']+data['c4p ']+data['c5p ']+data['c6p '])
     return dens
 def _CVIdensity(field, data):
@@ -119,6 +127,7 @@ def _SiIIIfrac_trident(field, data):
     dens = data['Si_p2_density']/(data['Si_p0_density']+data['Si_p1_density']+data['Si_p2_density']+data['Si_p3_density']+data['Si_p4_density']+data['Si_p5_density'])
     return dens
 def _SiIIIfrac_chem(field, data):
+    #dens = data['si2p']/(data['si']+data['sip']+data['si2p']+data['si3p']+data['si4p']+data['si5p'])
     dens = data['si2p']/(data['si  ']+data['sip ']+data['si2p']+data['si3p']+data['si4p']+data['si5p'])
     return dens
 def _SiIIIdensity(field, data):
@@ -131,6 +140,7 @@ def _SiIVfrac_trident(field, data):
     dens = data['Si_p3_density']/(data['Si_p0_density']+data['Si_p1_density']+data['Si_p2_density']+data['Si_p3_density']+data['Si_p4_density']+data['Si_p5_density'])
     return dens
 def _SiIVfrac_chem(field, data):
+    #dens = data['si3p']/(data['si']+data['sip']+data['si2p']+data['si3p']+data['si4p']+data['si5p'])
     dens = data['si3p']/(data['si  ']+data['sip ']+data['si2p']+data['si3p']+data['si4p']+data['si5p'])
     return dens
 def _SiIVdensity(field, data):
@@ -143,10 +153,11 @@ def _NVfrac_trident(field, data):
     dens = data['N_p4_density']/(data['N_p0_density']+data['N_p1_density']+data['N_p2_density']+data['N_p3_density']+data['N_p5_density']+data['N_p6_density']+data['N_p7_density'])
     return dens
 def _NVfrac_chem(field, data):
+    #dens = data['n4p']/(data['n']+data['np']+data['n2p']+data['n3p']+data['n4p']+data['n5p']+data['n6p']+data['n7p'])
     dens = data['n4p ']/(data['n   ']+data['np  ']+data['n2p ']+data['n3p ']+data['n4p ']+data['n5p ']+data['n6p ']+data['n7p '])
     return dens
 def _NVdensity(field, data):
-    dens = (data[(('flash', u'n4p '))]*data['density'])/(14.*1.6726219e-24)
+    dens = (data[(('flash', u'n4p'))]*data['density'])/(14.*1.6726219e-24)
     return dens
 
 
@@ -155,6 +166,7 @@ def _OVIfrac_trident(field, data):
     dens = data['O_p5_density']/(data['O_p0_density']+data['O_p1_density']+data['O_p2_density']+data['O_p3_density']+data['O_p4_density']+data['O_p5_density']+data['O_p6_density']+data['O_p7_density']+data['O_p8_density'])
     return dens
 def _OVIfrac_chem(field, data):
+    #dens = data['o5p']/(data['o']+data['op']+data['o2p']+data['o3p']+data['o4p']+data['o5p']+data['o6p']+data['o7p']+data['o8p'])
     dens = data['o5p ']/(data['o   ']+data['op  ']+data['o2p ']+data['o3p ']+data['o4p ']+data['o5p ']+data['o6p ']+data['o7p ']+data['o8p '])
     return dens
 def _OVIdensity(field, data):
@@ -167,6 +179,7 @@ def _NeVIIIfrac_trident(field, data):
     dens = data['Ne_p7_density']/(data['Ne_p0_density']+data['Ne_p1_density']+data['Ne_p2_density']+data['Ne_p3_density']+data['Ne_p4_density']+data['Ne_p5_density']+data['Ne_p6_density']+data['Ne_p7_density']+data['Ne_p8_density']+data['Ne_p9_density'])
     return dens
 def _NeVIIIfrac_chem(field, data):
+    #dens = data['ne7p']/(data['ne']+data['nep']+data['ne2p']+data['ne3p']+data['ne4p']+data['ne5p']+data['ne6p']+data['ne7p']+data['ne8p']+data['ne9p'])
     dens = data['ne7p']/(data['ne  ']+data['nep ']+data['ne2p']+data['ne3p']+data['ne4p']+data['ne5p']+data['ne6p']+data['ne7p']+data['ne8p']+data['ne9p'])
     return dens
 def _NeVIIIdensity(field, data):

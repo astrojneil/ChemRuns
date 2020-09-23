@@ -14,8 +14,8 @@ M1 = ['0000', '0002', '0005', '0008', '0011', '0014', '0017', '0021', '0025', '0
 M6 = ['0000', '0002', '0006', '0011', '0015', '0019', '0023', '0028', '0032']
 
 ChemList = M1
-atom = 'H'
-ion = 'I'
+atom = 'Mg'
+ion = 'II'
 fieldtype = 'frac'
 fieldname = fieldtype+atom+ion
 savedir = 'M1-v480-T1-chem'
