@@ -16,7 +16,7 @@ M6 = ['0000', '0002', '0006', '0011', '0015', '0019', '0023', '0028', '0032']
 ChemList = M1
 atom = 'C'
 ion = 'III'
-fieldtype = 'frac'
+fieldtype = 'dens'
 fieldname = fieldtype+atom+ion
 savedir = 'M1-v480-T1-chem'
 
@@ -54,20 +54,20 @@ for i in ChemList:
 
 
     #plot trident fractions
-    p = yt.SlicePlot(data, 'z', fieldname+'_tri', origin = 'native')
+    p = yt.ProjectionPlot(data, 'z', fieldname+'_tri', origin = 'native')
     p.set_zlim(fieldname+'_tri', 9e-5, 1.)
     p.set_cmap(fieldname+'_tri', cmap=newcmp)
     p.annotate_timestamp(text_args = {'color':'black'})
-    p.save('../'+savedir+'/figures/Tri'+i+fieldname+'.png')
+    p.save('../'+savedir+'/figures/Tri'+i+fieldname+'_proj.png')
 
     #plot MAIHEM fractions
-    p2 = yt.SlicePlot(data, 'z', fieldname+'_chem', origin = 'native')
+    p2 = yt.ProjectionPlot(data, 'z', fieldname+'_chem', origin = 'native')
     p2.set_zlim(fieldname+'_chem', 9e-5, 1.)
     p2.set_cmap(fieldname+'_chem', cmap=newcmp)
     p2.annotate_timestamp(text_args = {'color':'black'})
-    p2.save('../'+savedir+'/figures/Chem_'+i+'_'+fieldname+'.png')
+    p2.save('../'+savedir+'/figures/Chem_'+i+'_'+fieldname+'_proj.png')
 
     #plot extra slices
-    p3 = yt.SlicePlot(data, 'z', 'density', origin = 'native')
+    p3 = yt.ProjectionPlot(data, 'z', 'density', origin = 'native')
     p3.set_zlim('density', 1e-28, 1e-23)
-    p3.save('../'+savedir+'/figures/'+i+'densSlice.png')
+    p3.save('../'+savedir+'/figures/'+i+'densProj.png')

@@ -8,32 +8,41 @@ import numpy as np
 plt.rc('xtick',labelsize=15)
 plt.rc('ytick',labelsize=15)
 
-plotName = 'massLoss1_Beta1'
+cloudMass =1.223869564736320599e38
 
-hydro = '../hydro/KH.dat'
+plotName = 'massLoss1v6'
 
-time_hydro = FLASHdat_retrieve(hydro, 'time/tcc')
-mass_hydro = FLASHdat_retrieve(hydro, 'mass_blob(>rho0/3.)')
+M1 = '../M1-v480-T1-chem/runfiles/CT.dat'
+M6 = '../M6.2-v3000-T1-chem/runfiles/CT.dat'
+
+time_M1 = FLASHdat_retrieve(M1, 'time/tcc')
+mass_M1 = FLASHdat_retrieve(M1, 'mass_blob(>rho0/3.)')
+
+time_M6 = FLASHdat_retrieve(M6, 'time/tcc')
+mass_M6 = FLASHdat_retrieve(M6, 'mass_blob(>rho0/3.)')
 
 #exclude weird values:
-exclude = np.where(mass_hydro <= 0.)
-mass_hydro = np.delete(mass_hydro, exclude)
-time_hydro = np.delete(time_hydro, exclude)
+#exclude = np.where(mass_hydro <= 0.)
+#mass_hydro = np.delete(mass_hydro, exclude)
+#time_hydro = np.delete(time_hydro, exclude)
 
-fig, axs = plt.subplots(2, sharex = True)
+fig, axs = plt.subplots(2, sharex=True)
 ax2 = axs[0].twiny()
 
-axs[0].plot(time_hydro, mass_hydro/mass_hydro[0], label = 'H-rad-hr', color = 'black', linewidth = 2)
+print(M6[0:6])
+
+axs[0].plot(time_M6, mass_M6/cloudMass, label = 'M6.2-v3000-T1', color = 'black', linewidth = 2)
+axs[0].plot(time_M1, mass_M1/cloudMass, label = 'M1-v480-T1', color = 'red', linewidth = 2)
 
 
 axs[0].set_xlim(0, 8.)
 axs[0].set_ylim(0.5, 1)
-axs[1].set_xlim(0, 8.)
-axs[1].set_ylim(0.5, 1)
+#axs[1].set_xlim(0, 8.)
+#axs[1].set_ylim(0.5, 1)
 axs[0].legend(loc=3, fontsize = 15)
-axs[1].legend(loc=3, fontsize = 15)
+#axs[1].legend(loc=3, fontsize = 15)
 axs[0].set_ylabel('Mass Fraction', fontsize = 20)
-axs[1].set_ylabel('Mass Fraction', fontsize = 20)
+#axs[1].set_ylabel('Mass Fraction', fontsize = 20)
 axs[1].set_xlabel(r'Time ($t_{\rm cc}$)', fontsize = 20)
 
 ax1X = axs[0].get_xticks()

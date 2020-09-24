@@ -109,18 +109,24 @@ def addTriDens(data, atom, ion):
         ionNum = ionList[ion]
         fieldname = fracList[ionNum][:-7]+'number_density'
         return data[fieldname]
-    data.add_field(('gas', 'dens'+atom+ion+'_tri'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="cm^-3")
+    data.add_field(('gas', 'dens'+atom+ion+'_tri'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="1/cm**3")
     #trident already adds the number density! so you're all good here
     return data
 
 def addChemDens(data, atom, ion):
     def _newDens(field, data):
-        #data[(('flash', u'si2p'))]
-        fracList = atomFracs_chem[atom]
-        ionNum = ionList[ion]
-        atomMass = masses[atom]
-        top = data[(('flash', fracList[ionNum]))]
-        frac = top*data['density']/(atomMass*mp)
+        try:
+            fracList = atomFracs_chem[atom]
+            ionNum = ionList[ion]
+            atomMass = masses[atom]
+            top = data[(('flash', fracList[ionNum]))]
+            frac = top*data['density']/data.apply_units((atomMass*mp), 'g')
+        except(yt.utilities.exceptions.YTFieldNotFound):
+            fracList = atomFracs_chem_short[atom]
+            ionNum = ionList[ion]
+            atomMass = masses[atom]
+            top = data[(('flash', fracList[ionNum]))]
+            frac = top*data['density']/data.apply_units((atomMass*mp), 'g')
         return frac
-    data.add_field(('gas', 'dens'+atom+ion+'_chem'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="cm^-3")
+    data.add_field(('gas', 'dens'+atom+ion+'_chem'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="1/cm**3")
     return data
