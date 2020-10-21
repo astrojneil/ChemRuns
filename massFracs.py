@@ -32,13 +32,13 @@ atomFracs_chem_short = {'H': ['h', 'hp'],
 ionList = {"I": 0, "II": 1, "III": 2, "IV": 3, "V":4, "VI":5, "VII":6, "VIII":7, "IX":8, "X":9}
 
 mp = 1.6727219e-24
-masses = {"H":2,
-            'Mg': 24,
-            'C': 12,
-            'Si': 28,
-            'N': 14,
-            'O': 16,
-            'Ne': 20}
+masses = {"H":1.00794,
+            'Mg': 24.3050,
+            'C': 12.0107,
+            'Si': 28.0855,
+            'N': 14.0067,
+            'O': 15.9994,
+            'Ne': 20.1797}
 
 
 def addfield(data, atom, ion, fieldtype, datatype):
@@ -80,7 +80,7 @@ def addTriFrac(data, atom, ion):
         top = data[fracList[ionNum]]
         frac = top/data.apply_units(botsum, "g/cm**3")
         return frac
-    data.add_field(('gas', 'frac'+atom+ion+'_tri'), function=_newFrac, display_name=atom+' '+ion+' Mass Fraction (Tri)', units="")
+    data.add_field(('gas', 'frac'+atom+ion+'_tri'), function=_newFrac, display_name=atom+' '+ion+' Mass Fraction (Tri)', units="", sampling_type = 'cell')
     return data
 
 def addChemFrac(data, atom, ion):
@@ -98,7 +98,7 @@ def addChemFrac(data, atom, ion):
             top = data[fracList[ionNum]]
             frac = top/botsum
         return frac
-    data.add_field(('gas', 'frac'+atom+ion+'_chem'), function=_newFrac, display_name=atom+' '+ion+' Mass Fraction', units="")
+    data.add_field(('gas', 'frac'+atom+ion+'_chem'), function=_newFrac, display_name=atom+' '+ion+' Mass Fraction', units="", sampling_type = 'cell')
     return data
 
 def addTriDens(data, atom, ion):
@@ -109,7 +109,7 @@ def addTriDens(data, atom, ion):
         ionNum = ionList[ion]
         fieldname = fracList[ionNum][:-7]+'number_density'
         return data[fieldname]
-    data.add_field(('gas', 'dens'+atom+ion+'_tri'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="1/cm**3")
+    data.add_field(('gas', 'dens'+atom+ion+'_tri'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="1/cm**3", sampling_type = 'cell')
     #trident already adds the number density! so you're all good here
     return data
 
@@ -128,5 +128,5 @@ def addChemDens(data, atom, ion):
             top = data[(('flash', fracList[ionNum]))]
             frac = top*data['density']/data.apply_units((atomMass*mp), 'g')
         return frac
-    data.add_field(('gas', 'dens'+atom+ion+'_chem'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="1/cm**3")
+    data.add_field(('gas', 'dens'+atom+ion+'_chem'), function=_newDens, display_name=atom+' '+ion+' Number Density', units="1/cm**3", sampling_type = 'cell')
     return data

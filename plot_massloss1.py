@@ -14,12 +14,16 @@ plotName = 'massLoss1v6'
 
 M1 = '../M1-v480-T1-chem/runfiles/CT.dat'
 M6 = '../M6.2-v3000-T1-chem/runfiles/CT.dat'
+M3 = '../M3.6-v3000-T3-chem/runfiles/CT.dat'
 
 time_M1 = FLASHdat_retrieve(M1, 'time/tcc')
 mass_M1 = FLASHdat_retrieve(M1, 'mass_blob(>rho0/3.)')
 
 time_M6 = FLASHdat_retrieve(M6, 'time/tcc')
 mass_M6 = FLASHdat_retrieve(M6, 'mass_blob(>rho0/3.)')
+
+time_M3 = FLASHdat_retrieve(M3, 'time/tcc')
+mass_M3 = FLASHdat_retrieve(M3, 'mass_blob(>rho0/3.)')
 
 #exclude weird values:
 #exclude = np.where(mass_hydro <= 0.)
@@ -33,6 +37,7 @@ print(M6[0:6])
 
 axs[0].plot(time_M6, mass_M6/cloudMass, label = 'M6.2-v3000-T1', color = 'black', linewidth = 2)
 axs[0].plot(time_M1, mass_M1/cloudMass, label = 'M1-v480-T1', color = 'red', linewidth = 2)
+axs[0].plot(time_M3, mass_M3/cloudMass, label = 'M3.6-v3000-T3', color = 'orange', linewidth = 2)
 
 
 axs[0].set_xlim(0, 8.)

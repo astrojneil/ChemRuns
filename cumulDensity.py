@@ -54,7 +54,7 @@ def main():
     run1 = {'Name':'M1-v480-T1-chem',
         'times': ['0000', '0044']}
     run2 = {'Name':'M6.2-v3000-T1-chem',
-        'times':['0000', '0032']}
+        'times':['0000', '0066']}
     run3 = {'Name':'M3.6-v3000-T3-chem',
         'times':['0000']}
     runList = []
@@ -108,7 +108,7 @@ def main():
     ionList.append(ion6)
     ionList.append(ion7)
 
-    for run in runList:
+    for run in [run2]: #runList:
         unRank_chem = pd.DataFrame()
         unRank_tri = pd.DataFrame()
 
