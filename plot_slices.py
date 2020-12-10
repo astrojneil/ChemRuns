@@ -13,12 +13,12 @@ mylog.setLevel(40) # This sets the log level to "ERROR"
 M1 = ['0000', '0002', '0005', '0008', '0011', '0014', '0017', '0021', '0025', '0027', '0030', '0033', '0036', '0038', '0041']
 M6 = ['0000', '0002', '0006', '0011', '0015', '0019', '0023', '0028', '0032']
 
-ChemList = M1
-atom = 'C'
-ion = 'III'
+ChemList = M6
+atom = 'Ne'
+ion = 'VIII'
 fieldtype = 'frac'
 fieldname = fieldtype+atom+ion
-savedir = 'M1-v480-T1-chem'
+savedir = 'M6.2-v3000-T1-chem'
 
 #usage of massFracs to add data
 #addfield(data, atom, ion, fieldtype, datatype)

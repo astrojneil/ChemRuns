@@ -182,7 +182,7 @@ def _metallicity(field, data):
 
 
 for i in ChemList:
-    data = yt.load('../'+savedir+'/CT_hdf5_chk_'+i)
+    data = yt.load('../'+savedir+'/chkfiles/CT_hdf5_chk_'+i)
     #pressure estimates:
     reg = data.all_data()
     maxPres = reg.max('pressure')
@@ -227,10 +227,10 @@ for i in ChemList:
 
     #print the fraction data to file
     #select the center of the simulations
-    ad = data.sphere([0.0, 7.7e20, 0.0], (50., 'pc'))   #wind!
+    #ad = data.sphere([0.0, 7.7e20, 0.0], (50., 'pc'))   #wind!
 
-    #alldata = data.all_data()
-    #ad  = alldata.cut_region(['obj["blob"] >= 0.9'])     #cloud!
+    alldata = data.all_data()
+    ad  = alldata.cut_region(['obj["blob"] >= 0.9'])     #cloud!
     print('{:.4e}'.format(float(ad.mean('cjto'))))
     writefile.write(str(i)+', '+'{:.4e}'.format(float(ad.mean('fracHI')))+', '+'{:.4e}'.format(float(ad.mean('fracMgII')))+', '+'{:.4e}'.format(float(ad.mean('fracCI')))+', '+'{:.4e}'.format(float(ad.mean('fracCII')))+', '+'{:.4e}'.format(float(ad.mean('fracCIII')))+', '+'{:.4e}'.format(float(ad.mean('fracCIV')))+', '+'{:.4e}'.format(float(ad.mean('fracCV')))+', '+'{:.4e}'.format(float(ad.mean('fracCVI')))+', '+'{:.4e}'.format(float(ad.mean('fracSiIII')))+', '+'{:.4e}'.format(float(ad.mean('fracSiIV')))+', '+'{:.4e}'.format(float(ad.mean('fracNV')))+', '+'{:.4e}'.format(float(ad.mean('fracOVI')))+', '+'{:.4e}'.format(float(ad.mean('fracNeVIII')))+'\n')
 
