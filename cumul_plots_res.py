@@ -16,9 +16,9 @@ size4 = 7859*clouds
 size2 = 1965*clouds
 size1 = 491*clouds
 
-colors = {'H I': black, 'Mg II':blu, 'C III':gre, 'C IV':org, 'N V':red, 'O VI':pur, 'Ne VIII':pink}
+colors = {'H I 1215': black, 'Mg II':blu, 'C III':gre, 'C IV':blu, 'N V':red, 'O VI':gre, 'Ne VIII':pink}
 style = {800:'solid', 400:'dashed', 200:'dotted', 100:'dashdot'}
-machs = ['m1', 'm3', 'm6']
+machs = ['m1', 'm3', 'm6_other']
 #M1 = pd.read_csv('testRes_m1.csv')
 #M6 = pd.read_csv('testRes_m6.csv')
 #M3 = pd.read_csv('testRes_m3.csv')
@@ -26,7 +26,7 @@ machs = ['m1', 'm3', 'm6']
  #M1
 fig, ax = plt.subplots(3,1,figsize = (9, 10))
 
-for ion in ['Mg II','C IV','O VI']:
+for ion in ['H I 1215','C IV','O VI']:
     for i in range(len(machs)):
         M = pd.read_csv('testRes_'+machs[i]+'.csv')
         coldens_800 = M[ion+'_800']
@@ -53,11 +53,13 @@ for ion in ['Mg II','C IV','O VI']:
         ax[i].plot(coldens_sort_400[-size4:], y4, label=ion+'_400', linestyle = 'dashed', color = colors[ion])
         ax[i].plot(coldens_sort_200[-size2:], y2, label=ion+'_200', linestyle = 'dotted', color = colors[ion])
         ax[i].plot(coldens_sort_100[-size1:], y1, label=ion+'_100', linestyle = 'dashdot', color = colors[ion])
-        ax[i].set_title('Mach {}'.format(machs[i][1:]))
+        ax[i].set_title('Mach {}'.format(machs[i][1:2]))
         ax[i].set_ylabel("Cloud Area", fontsize = 13)
-        ax[i].set_ylim(0, clouds)
-        ax[i].set_xlim(10, 17)
+        ax[i].set_xlim(8, 17)
 
+ax[0].set_ylim(0, clouds)
+ax[1].set_ylim(0, 4)
+ax[2].set_ylim(0, 1.5)
 ax[0].legend(bbox_to_anchor=(1.05, 1))
 #ax[0].set_ylim(0, 1)
 ax[2].set_xlabel('$\log(N_{ion})$', fontsize=13)
