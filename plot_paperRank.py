@@ -7,6 +7,7 @@ import pandas as pd
 from massFracs import *
 import yt
 
+kpc = 3.086e21 #cm
 
 matplotlib.rc('xtick', labelsize=20)
 matplotlib.rc('ytick', labelsize=20)
@@ -132,35 +133,37 @@ for run in runs:
             #add this ion
             _ = addfield(data, ion['atom'], ion['ion'], 'dens', 'chem')
 
-            #select the region
-            reg = data.all_data()
 
-            #plot projection of ion
-            p = yt.ProjectionPlot(data, 1, ion['chem'], origin='native',  width=(0.6, 'kpc'))
-            p.set_zlim(ion['chem'], 1e12, 1e18)
-            p.set_cmap(ion['chem'], cmap=newcmp)
-
-            p_plot = p.plots[ion['chem']]
-            p_plot.hide_colorbar()
-            p_plot.hide_axes()
-
-
+            #set size of the line plot
+            fig, ax = plt.subplots(figsize= (8, 8), tight_layout =True, )
+            #ax1.set_position([0.1, 0.1, 0.85, 0.85])
+            ax.set_zorder(1)
+            #add line plot to axes
             x = np.arange(pix, 0, -1)/7880
 
-            #fig, ax = plt.subplots()
-            fig = p_plot.figure
-            ax1 = p_plot.axes
-            ax1.set_position([0.15, 0.15, 0.35, 0.35])
-            ax1.set_zorder(2)
-            #p_plot.figure.set_figure(fig)
-            left, bottom, width, height = [0.1, 0.1, 0.85, 0.85]
-            ax = fig.add_axes([left, bottom, width, height], zorder = 1)
-
-            ax.plot(x, chem[0][-pix:], color = 'blue', label = 'Chem', linewidth= 2)
+            ax.plot(x, chem[0][-pix:], color = 'blue', label = 'MAHIEM', linewidth= 2)
             ax.plot(x, tri[0][-pix:], color = 'red', label = 'Trident', linestyle = 'dashed', linewidth=2)
             ax.legend(loc=1, fontsize = 20)
             ax.set_yscale('log')
-            ax.set_title('Y Proj')
+            ax.set_xlabel('Initial Cloud Area')
+            ax.set_ylabel(r'Column Density (cm$^{-2}$)')
+            #ax.set_title('Y Proj')
             ax.tick_params(length=6, width=2)
 
-            fig.savefig('../rankNum/'+ion['name']+'/'+ion['name']+'_'+run['name']+'_'+time+'.png')
+
+            #set the size and order of the projection
+            left, bottom, width, height = [0.18, 0.17, 0.32, 0.32]
+            ax1 = fig.add_axes([left, bottom, width, height], zorder = 2)
+            cax1 = fig.add_axes([0.18, 0.16, 0.32, 0.03], zorder = 3)
+
+            #add projection
+            proj = data.proj(ion['chem'], 1)
+            frb = yt.FixedResolutionBuffer(proj, (-0.3*kpc, 0.3*kpc, -0.3*kpc, 0.3*kpc), (800, 800))
+
+            psm = ax1.pcolormesh(np.log10(frb[ion['chem']]), cmap=newcmp, rasterized=True, vmin=min(np.log10(chem[0][-pix:])), vmax=max(np.log10(chem[0][-pix:])))
+
+            fig.colorbar(psm, cax=cax1, orientation='horizontal', extend='both')
+            ax1.get_xaxis().set_visible(False)
+            ax1.get_yaxis().set_visible(False)
+
+            fig.savefig('../rankNum/'+ion['name']+'/'+ion['name']+'_'+run['name']+'_'+time+'_ydir.png')

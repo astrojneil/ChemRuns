@@ -10,6 +10,9 @@ from massFracs import *
 import pandas as pd
 from yt.units import centimeter, gram, second, Kelvin, erg
 
+from yt.funcs import mylog
+mylog.setLevel(50) # This sets the log level to "CRITICAL"
+
 kpc = 3.086e+21*centimeter
 c_speed = 3.0e10  #cm/s
 mp = 1.6726e-24*gram #grams
@@ -75,13 +78,14 @@ def findCloudVel(runName, f_list):
 def getDensities(runName, time, ionList, velBin, frameVel):
     frameVel = frameVel*1.0e5*(centimeter/second)
     data = yt.load('../'+runName+'/chkfiles/CT_hdf5_chk_'+time)
-    data.add_field(('gas', 'metallicity'), function=_metallicity, display_name="Metallicity", units='Zsun')
+    data.add_field(('gas', 'metallicity'), function=_metallicity, display_name="Metallicity", units='Zsun', sampling_type = 'cell')
 
     bList = []
     vList = []
     TList = []
 
     for ion in ionList:
+        print(ion['name'], end = ' ')
 
         for source in ['chem']:  #here you can define chem or trident
             #add the ion to the dataset
@@ -120,7 +124,7 @@ def getDensities(runName, time, ionList, velBin, frameVel):
                 b = topFrac/botFrac
                 return b
 
-            data.add_field(('gas', 'b_therm'), function=_btherm, display_name="B thermal squared", units = 'cm**2/s**2', force_override=True)
+            data.add_field(('gas', 'b_therm'), function=_btherm, display_name="B thermal squared", units = 'cm**2/s**2', force_override=True, sampling_type = 'cell')
             #project b thermal
             btherm = data.proj('b_therm', 1, weight_field=ion[source])
             frb_therm = yt.FixedResolutionBuffer(btherm, (-2.464e21, 2.464e21, -2.464e21, 2.464e21), (800, 800))
@@ -131,7 +135,7 @@ def getDensities(runName, time, ionList, velBin, frameVel):
                 b = (data['vely'] - average_vely)**2
                 return b  #multiply by number density to weight the b value
 
-            data.add_field(('gas', 'b_doppler'), function=_bdop, display_name="B doppler squared", units = 'cm**2/s**2', force_override=True)
+            data.add_field(('gas', 'b_doppler'), function=_bdop, display_name="B doppler squared", units = 'cm**2/s**2', force_override=True, sampling_type = 'cell')
             #project b doppler
             bdop = data.proj('b_doppler', 1, weight_field=ion[source])
             frb_dop = yt.FixedResolutionBuffer(bdop, (-2.464e21, 2.464e21, -2.464e21, 2.464e21), (800, 800))
@@ -162,14 +166,15 @@ def getDensities(runName, time, ionList, velBin, frameVel):
 def main():
     #define the runs and ions
     run1 = {'Name':'M1-v480-T1-chem',
-        'times': ['0000', '0044']}
+        'times': ['0000', '0030', '0041']}
     run2 = {'Name':'M6.2-v3000-T1-chem',
-        'times':['0000', '0032']}
+        'times':['0000', '0076']}
     run3 = {'Name':'M3.6-v3000-T3-chem',
-        'times':['0000']}
+        'times':['0000', '0031']}
     runList = []
     runList.append(run1)
     runList.append(run2)
+    runList.append(run3)
 
 
     ion1 = {'atom':'H',
@@ -256,16 +261,19 @@ def main():
     writebv_file = open('../rankNum/Totalrun_allIon_bv_temp.txt', 'w')
     writebv_file.write('Run, frame, Ion, Average_vel(cm/s), b(cm/s), T(K)\n')
     for run in runList:
+        print('Beginning run {}'.format(run['Name']))
+        print('Calculating frame velocities...')
         velBins, velFrames = findCloudVel(run['Name'], run['times']) #velocities in km/s
 
-        for t in [0, 1]:
-
+        print('Looping through times...')
+        for t in range(len(velBins)):
+            print("\nTime {}:".format(t))
             #this function outputs the ranked num files
             bList, vList, TList = getDensities(run['Name'], run['times'][t], ionList, t, velFrames[t])
 
             for i in range(len(ionList)):
                 writeString = run['Name']+', '+str(t)+', '+ionList[i]['ionfolder'][1:-1]+', '+str(vList[i].value)+', '+str(bList[i])+', '+str(TList[i])+'\n'
-                print(writeString)
+                #print(writeString)
                 writebv_file.write(writeString)
 
     writebv_file.close()
