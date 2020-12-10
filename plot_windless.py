@@ -6,9 +6,9 @@ import yt
 from yt.units import dimensions
 import trident as tri
 
-ChemList = ['0000', '0005', '0010', '0015', '0016']
+ChemList = ['0000', '0004', '0009']
 field = 'fracOVI'
-savedir = 'M1-v480-T1-chem'
+savedir = 'farWind'
 
 writefile = open('../'+savedir+'/massFracs_cloud.txt', 'w')
 writefile.write('Chk, HI, MgII, CI, CII, CIII, CIV, CV, CVI, SiIII, SiIV, NV, OVI, NeVIII\n')
