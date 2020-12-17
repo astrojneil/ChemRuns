@@ -16,6 +16,13 @@ size4 = 7859*clouds
 size2 = 1965*clouds
 size1 = 491*clouds
 
+
+pc2 = 9.52e36 #cm^2
+area8 = 1*pc2
+area4 = 4*pc2
+area2 = 16*pc2
+area1 = 64*pc2
+
 colors = {'H I 1215': black, 'Mg II':blu, 'C III':gre, 'C IV':blu, 'N V':red, 'O VI':gre, 'Ne VIII':pink}
 style = {800:'solid', 400:'dashed', 200:'dotted', 100:'dashdot'}
 machs = ['m1', 'm3', 'm6_other']
@@ -37,7 +44,6 @@ for ion in ['H I 1215','C IV','O VI']:
         coldens_sort_400 = np.sort(np.log10(coldens_400))
         coldens_sort_200 = np.sort(np.log10(coldens_200))
         coldens_sort_100 = np.sort(np.log10(coldens_100))
-        print(coldens_sort_400)
 
         #y = np.arange(len(coldens_sort_M1[-size:])+1, 1, -1)/(0.5*len(coldens_sort_M1[-size:]))
         y8 = np.arange(len(coldens_sort_800[-size8:])+1, 1, -1)/(len(coldens_sort_800[-size8:])/clouds)
@@ -45,10 +51,19 @@ for ion in ['H I 1215','C IV','O VI']:
         y2 = np.arange(len(coldens_sort_200[-size2:])+1, 1, -1)/(len(coldens_sort_200[-size2:])/clouds)
         y1 = np.arange(len(coldens_sort_100[-size1:])+1, 1, -1)/(len(coldens_sort_100[-size1:])/clouds)
 
-        #ax[i].plot(coldens_sort_M1[-size:], y2, label=ion+'_chem', color = colors[ion])
-        #ax[i].plot(coldens_sort_M3[-size:], y2, label=ion+'_tri', linestyle = 'dashed', color = colors[ion])
-        #ax[i].plot(coldens_sort_M6[-size:], y2, label=ion+'_tri', linestyle = 'dashed', color = colors[ion])
+        #test mass conservation
+        col_sort_800 = np.sort(coldens_800)
+        col_sort_400 = np.sort(coldens_400)
+        col_sort_200 = np.sort(coldens_200)
+        col_sort_100 = np.sort(coldens_100)
+        print(ion)
+        print(machs[i])
+        print('800: {}'.format(np.sum(col_sort_800[-size8:]*area8)))
+        print('400: {}'.format(np.sum(col_sort_400[-size4:]*area4)))
+        print('200: {}'.format(np.sum(col_sort_200[-size2:]*area2)))
+        print('100: {}'.format(np.sum(col_sort_100[-size1:]*area1)))
 
+        #plot
         ax[i].plot(coldens_sort_800[-size8:], y8, label=ion+'_800', color = colors[ion])
         ax[i].plot(coldens_sort_400[-size4:], y4, label=ion+'_400', linestyle = 'dashed', color = colors[ion])
         ax[i].plot(coldens_sort_200[-size2:], y2, label=ion+'_200', linestyle = 'dotted', color = colors[ion])
