@@ -16,7 +16,7 @@ for run in runList:
     outfile.write('Time,meanDens\n')
     fileList = os.listdir('../'+run['Name']+'/chkfiles')
     for chk in fileList:
-        data = yt.load('../'+run['Name']+'/chkfiles/CT_hdf5_chk_'+i)
+        data = yt.load('../'+run['Name']+'/chkfiles/'+chk)
         dataRegion = data.all_data()
         cloud_region1 = dataRegion.cut_region(['obj["blob"] > 0.'])
         mean_dens = cloud_region1.quantities.weighted_average_quantity("density", "ones")
