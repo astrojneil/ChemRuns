@@ -134,13 +134,13 @@ grid = AxesGrid(fig, (0.1, 0.075, 0.85, 0.85),
 
 run_new = run2
 run_old = run4
-for i in run['times']:
-    data1 = yt.load('../'+run_new['Name']+'/chkfiles/CT_hdf5_chk_'+i)
+for i in range(len(run_new['times'])):
+    data1 = yt.load('../'+run_new['Name']+'/chkfiles/CT_hdf5_chk_'+run_new['Times'][i])
     #add metallicity for Trident estimation fraction fields
     data1.add_field(('gas', 'metallicity'), function=_metallicity, display_name='Metallicity', units='Zsun')
 
     #open old run
-    data2 = yt.load('/Volumes/GiantDrive1/Blob_paper1/Files/'+run_old['Name']+'/KH_hdf5_chk_'+i)
+    data2 = yt.load('/Volumes/GiantDrive1/Blob_paper1/Files/'+run_old['Name']+'/KH_hdf5_chk_'+run_old['Times'][i])
     #add metallicity for Trident estimation fraction fields
     data2.add_field(('gas', 'metallicity'), function=_metallicity, display_name='Metallicity', units='Zsun')
     fields_tri = []
