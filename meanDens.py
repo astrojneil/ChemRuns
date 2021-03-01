@@ -16,15 +16,11 @@ for run in runList:
     outfile.write('Time,meanDens\n')
     fileList = os.listdir('../'+run['Name']+'/chkfiles')
     for chk in fileList:
-
-        data = yt.load('CT_hdf5_chk_'+i)
-    	dataRegion = data.all_data()
-    	cloud_region1 = dataRegion.cut_region(['obj["blob"] > 0.'])
-
-    	cloud_region2 = cloud_region1.cut_region(['obj["density"] > 1e-24/3.'])
-    	mean_dens = cloud_region2.quantities.weighted_average_quantity("density", "ones")
-
-    	time = data.current_time.in_units('Myr')/run['tcc']
+        data = yt.load('../'+run['Name']+'/chkfiles/CT_hdf5_chk_'+i)
+        dataRegion = data.all_data()
+        cloud_region1 = dataRegion.cut_region(['obj["blob"] > 0.'])
+        mean_dens = cloud_region1.quantities.weighted_average_quantity("density", "ones")
+        time = data.current_time.in_units('Myr')/run['tcc']
 
         outfile.write(str(time)+', \t'+str(mean_dens)+'\n')
     outfile.close()
