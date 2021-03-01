@@ -4,10 +4,12 @@ import os
 
 run1 = {'Name':'M1-v480-T1-chem', 'Mach':1, 'tcc':6.4}
 run2 = {'Name':'M6.2-v3000-T1-chem', 'Mach':6.2, 'tcc':1.0}
+run3 = {'Name':'M3.6-v3000-T3-chem', 'Mach':3.6, 'tcc':1.8}
 
 runList = []
 runList.append(run1)
 runList.append(run2)
+runList.append(run3)
 
 outfile = open('runTimes.txt', 'w')
 for run in runList:

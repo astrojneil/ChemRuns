@@ -10,13 +10,15 @@ from massFracs import *
 from yt.funcs import mylog
 mylog.setLevel(40) # This sets the log level to "ERROR"
 
+kpc = 3.086e21 #cm
+
 #define the runs and ions
 run1 = {'Name':'M1-v480-T1-chem',
     'times': ['0041']}
 run2 = {'Name':'M6.2-v3000-T1-chem',
-    'times':['0000', '0076']}
+    'times':['0117' ]}
 run3 = {'Name':'M3.6-v3000-T3-chem',
-    'times':['0000', '0031']}
+    'times':['0143']}
 runList = []
 runList.append(run1)
 runList.append(run2)
@@ -98,8 +100,8 @@ ionList = []
 ionList.append(ion2)
 #ionList.append(ion3)
 ionList.append(ion4)
-ionList.append(ion5)
-#ionList.append(ion6)
+#ionList.append(ion5)
+ionList.append(ion6)
 ionList.append(ion7)
 
 #add metallicity to dataset, constant Z = 1 Zsun
@@ -125,7 +127,7 @@ grid = AxesGrid(fig, (0.1, 0.075, 0.85, 0.85),
             cbar_location="right",
             cbar_mode="single")
 
-run = run1
+run = run2
 for i in run['times']:
     data = yt.load('../'+run['Name']+'/chkfiles/CT_hdf5_chk_'+i)
     #add metallicity for Trident estimation fraction fields
@@ -145,9 +147,9 @@ for i in run['times']:
     # Create the plot.  Since SlicePlot accepts a list of fields, we need only
     # do this once.
     fields = fields_tri+fields_chem
-    p = yt.SlicePlot(data, 'z', fields, origin='native', width = (0.8, 'kpc'))
+    p = yt.SlicePlot(data, 'z', fields, origin='native', width = (0.8, 'kpc'), center = (0, 0.4*kpc, 0))
     p.set_cmap('all', cmap=newcmp)
-    p.set_zlim('all', 9e-5, 1.)
+    p.set_zlim('all', 9e-4, 1.)
 
     # For each plotted field, force the SlicePlot to redraw itself onto the AxesGrid
     for j, field in enumerate(fields):
