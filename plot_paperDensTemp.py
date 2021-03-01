@@ -37,11 +37,11 @@ newcolors[:1, :] = white
 newcmp = ListedColormap(newcolors)
 
 fig = plt.figure()
-grid = AxesGrid(fig, (0.1, 0.075, 0.85, 0.85),
+grid = AxesGrid(fig, (0.075, 0.075, 0.85, 0.85),
             nrows_ncols = (2, 2),
-            axes_pad = 0.05,
+            axes_pad = 0.1,
             cbar_size="3%",
-            cbar_pad="2%",
+            cbar_pad="4%",
             share_all=False,
             label_mode="1",
             cbar_location="right",
