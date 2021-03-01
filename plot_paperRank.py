@@ -127,8 +127,8 @@ for run in runs:
         data.add_field(('gas', 'metallicity'), function=_metallicity, display_name="Metallicity", units='Zsun', sampling_type = 'cell')
         for ion in ions:
             #open files for plotting, ranked column densities
-            chem = pd.read_csv('../rankNum/'+ion['name']+'/chem'+run['name']+'_v'+str(i+1)+'.txt', header = None)
-            tri = pd.read_csv('../rankNum/'+ion['name']+'/tri'+run['name']+'_v'+str(i+1)+'.txt', header = None)
+            chem = pd.read_csv('../rankNum/'+ion['name']+'/chem'+run['name']+'_v'+str(i+1)+'_xdir.txt', header = None)
+            tri = pd.read_csv('../rankNum/'+ion['name']+'/tri'+run['name']+'_v'+str(i+1)+'_xdir.txt', header = None)
 
             #add this ion
             _ = addfield(data, ion['atom'], ion['ion'], 'dens', 'chem')
@@ -157,13 +157,15 @@ for run in runs:
             cax1 = fig.add_axes([0.18, 0.16, 0.32, 0.03], zorder = 3)
 
             #add projection
-            proj = data.proj(ion['chem'], 1)
-            frb = yt.FixedResolutionBuffer(proj, (-0.3*kpc, 0.3*kpc, -0.3*kpc, 0.3*kpc), (800, 800))
+            #proj = data.proj(ion['chem'], 1)
+            #frb = yt.FixedResolutionBuffer(proj, (-0.3*kpc, 0.3*kpc, -0.3*kpc, 0.3*kpc), (800, 800))
+            frb = yt.ProjectionPlot(data, 0, ion['chem'], right_handed=True, width = (0.6, 'kpc'), center = (0, 0.2*kpc, 0)).frb
 
-            psm = ax1.pcolormesh(np.log10(frb[ion['chem']]), cmap=newcmp, rasterized=True, vmin=min(np.log10(chem[0][-pix:])), vmax=max(np.log10(chem[0][-pix:])))
+            frb_rot = np.rot90(frb[ion['chem']], 3)
+            psm = ax1.pcolormesh(np.log10(frb_rot), cmap=newcmp, rasterized=True, vmin=min(np.log10(chem[0][-pix:])), vmax=max(np.log10(chem[0][-pix:])))
 
             fig.colorbar(psm, cax=cax1, orientation='horizontal', extend='both')
             ax1.get_xaxis().set_visible(False)
             ax1.get_yaxis().set_visible(False)
 
-            fig.savefig('../rankNum/'+ion['name']+'/'+ion['name']+'_'+run['name']+'_'+time+'_ydir.png')
+            fig.savefig('../rankNum/'+ion['name']+'/'+ion['name']+'_'+run['name']+'_'+time+'_xdir.png')
