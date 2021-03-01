@@ -14,19 +14,19 @@ kpc = 3.086e21 #cm
 
 #define the runs and ions
 run1 = {'Name':'M1-v480-T1-chem',
-    'times': ['0041']}
-run2 = {'Name':'M6.2-v3000-T1-chem',
-    'times':['0117' ]}
-run3 = {'Name':'M3.6-v3000-T3-chem',
-    'times':['0143']}
+    'times': ['0030']}
+run3 = {'Name':'M6.2-v3000-T1-chem',
+    'times':['0100' ]}
+run2 = {'Name':'M3.6-v3000-T3-chem',
+    'times':['0110']}
 
 
 run4 = {'Name':'T1_v480_chi1000',
-    'times':['0013']}
+    'times':['0009']}
 run5 = {'Name':'T3_v3000_chi3000',
-    'times':['0030']}
+    'times':['0021']}
 run6 = {'Name':'T1_v3000_chi1000',
-    'times':['0032']}
+    'times':['0022']}
 
 
 ion1 = {'atom':'H',
@@ -132,15 +132,15 @@ grid = AxesGrid(fig, (0.1, 0.075, 0.85, 0.85),
             cbar_location="right",
             cbar_mode="single")
 
-run_new = run2
-run_old = run4
+run_new = run3
+run_old = run6
 for i in range(len(run_new['times'])):
-    data1 = yt.load('../'+run_new['Name']+'/chkfiles/CT_hdf5_chk_'+run_new['Times'][i])
+    data1 = yt.load('../'+run_new['Name']+'/chkfiles/CT_hdf5_chk_'+run_new['times'][i])
     #add metallicity for Trident estimation fraction fields
     data1.add_field(('gas', 'metallicity'), function=_metallicity, display_name='Metallicity', units='Zsun')
 
     #open old run
-    data2 = yt.load('/Volumes/GiantDrive1/Blob_paper1/Files/'+run_old['Name']+'/KH_hdf5_chk_'+run_old['Times'][i])
+    data2 = yt.load('/Volumes/GiantDrive1/Blob_paper1/Files/'+run_old['Name']+'/KH_hdf5_chk_'+run_old['times'][i])
     #add metallicity for Trident estimation fraction fields
     data2.add_field(('gas', 'metallicity'), function=_metallicity, display_name='Metallicity', units='Zsun')
     fields_tri = []
@@ -182,9 +182,9 @@ for i in range(len(run_new['times'])):
     for j, field in enumerate(fields1):
         plot = p1.plots[field]
         plot.figure = fig
-        plot.axes = grid[j+3].axes
+        plot.axes = grid[j+4].axes
         plot.axes.title = "Test"
-        plot.cax = grid.cbar_axes[j+3]
+        plot.cax = grid.cbar_axes[j+4]
 
 
     # Finally, redraw the plot on the AxesGrid axes.
